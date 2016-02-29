@@ -40,4 +40,10 @@ class PhoneHelperTest < Minitest::Test
     end
   end
 
+  def test_split
+    expected = PhoneHelper::Number.new("421 9 031 23456").split
+    actual = PhoneHelper.split("421 9 031 23456")
+    assert_equal expected, actual
+  end
+
 end

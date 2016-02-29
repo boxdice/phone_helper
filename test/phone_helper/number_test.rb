@@ -54,6 +54,13 @@ module PhoneHelper
       assert_equal false, PhoneHelper::Number.new("09 03123-456").plausible?
     end
 
+    def test_split_should_return_array_of_calling_code_and_number
+      number = PhoneHelper::Number.new("421 9 031 23456")
+      expected = %w(421 903123456)
+      actual = number.split
+      assert_equal expected, actual
+    end
+
   end
 
 end

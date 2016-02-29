@@ -25,14 +25,27 @@ module PhoneHelper
 
     def formatted(format = :international)
       return unless @value
-      @formatted ||= Phony.format(normalized, format: format) if plausible?
-      @formatted ||= "0#{normalized}"
-      @formatted
+      @formatted ||= if plausible?
+        Phony.format(normalized, format: format)
+      else
+        "0#{normalized}"
+      end
     end
 
     def search_index
       return unless @value
       @search_index ||= formatted(:national).gsub(/\A0+/, "")
+    end
+
+    def split
+      return unless @value
+      if plausible?
+        parts = Phony.split(normalized)
+        calling_code = parts.shift
+        [calling_code, parts.join]
+      else
+        [nil, "0#{normalized}"]
+      end
     end
 
     private
