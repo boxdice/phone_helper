@@ -1,0 +1,107 @@
+AllCops:
+  TargetRubyVersion: 2.2
+  Include:
+    - "**/*.rake"
+    - Gemfile
+    - Rakefile
+    - Guardfile
+  Exclude:
+    - config/deploy.rb
+    - "vendor/**/*"
+    - db/schema.rb
+
+Documentation:
+  Enabled: false
+
+Lint/EndAlignment:
+  AlignWith: variable
+
+Lint/LiteralInInterpolation:
+  Enabled: true
+
+Metrics/AbcSize:
+  Exclude:
+    - db/migrate/*
+    - test/**/*
+
+Metrics/ClassLength:
+  Exclude:
+    - db/migrate/*
+    - test/**/*
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Exclude:
+    - db/migrate/*
+    - test/**/*
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Style/AutoResourceCleanup:
+  Enabled: true
+
+Style/CaseIndentation:
+  IndentWhenRelativeTo: end
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+
+Style/EmptyLinesAroundModuleBody:
+  EnforcedStyle: empty_lines
+
+Style/FirstParameterIndentation:
+  EnforcedStyle: special_for_inner_method_call
+
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+
+Style/MethodCalledOnDoEndBlock:
+  Exclude:
+    - test/**/*
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+# Style/PredicateName:
+#   Enabled: false
+
+Style/Send:
+  Enabled: true
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/StringMethods:
+  Enabled: true
+
+Style/SymbolArray:
+  Enabled: true
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
