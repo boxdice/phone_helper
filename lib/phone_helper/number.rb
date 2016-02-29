@@ -28,7 +28,7 @@ module PhoneHelper
       @formatted ||= if plausible?
         Phony.format(normalized, format: format)
       else
-        "0#{normalized}"
+        @value.gsub(/\D/, "")
       end
     end
 
