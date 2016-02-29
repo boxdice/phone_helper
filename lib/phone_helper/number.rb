@@ -34,7 +34,11 @@ module PhoneHelper
 
     def search_index
       return unless @value
-      @search_index ||= formatted(:national).gsub(/\A0+/, "")
+      @search_index ||= if plausible?
+        Phony.format(normalized, format: :national).gsub(/\A0+/, "").gsub(/\D/, "")
+      else
+        normalized
+      end
     end
 
     def split
