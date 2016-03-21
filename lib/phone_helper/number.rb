@@ -5,12 +5,9 @@ module PhoneHelper
   class Number
 
     def initialize(value, calling_code: nil, country: nil)
-      @value = value
+      @value = value.strip if value
       @calling_code = calling_code
-      @calling_code ||= if country
-        countries = CountryList[country]
-        countries.first.calling_code if countries.size == 1
-      end
+      @country = country
     end
 
     def plausible?
@@ -23,10 +20,14 @@ module PhoneHelper
       @normalized ||= normalize
     end
 
-    def formatted(format = :international)
+    def formatted
       return unless @value
       @formatted ||= if plausible?
-        Phony.format(normalized, format: format)
+        if calling_code || @value =~ /\A(00|\+)/
+          Phony.format(normalized, format: :international)
+        else
+          @value
+        end
       else
         @value.gsub(/\D/, "")
       end
@@ -35,7 +36,11 @@ module PhoneHelper
     def search_index
       return unless @value
       @search_index ||= if plausible?
-        Phony.format(normalized, format: :national).gsub(/\A0+/, "").gsub(/\D/, "")
+        if calling_code || @value =~ /\A(00|\+)/
+          Phony.format(normalized, format: :national).gsub(/\A0+/, "").gsub(/\D/, "")
+        else
+          @value.gsub(/\A0+/, "").gsub(/\D/, "")
+        end
       else
         normalized
       end
@@ -54,14 +59,21 @@ module PhoneHelper
 
     private
 
+    def calling_code
+      @calling_code ||= if @country
+        countries = CountryList[@country]
+        countries.first.calling_code if countries.size == 1
+      end
+    end
+
     def normalize
       result = @value.gsub(/\(0*(\d*)\)/, "\\1").gsub(/\D/, "")
       return Phony.normalize(result) if Phony.plausible?(result)
 
       result = result.gsub(/\A[0+]/, "")
-      return result unless @calling_code
+      return result unless calling_code
 
-      result = "#{@calling_code}#{result}"
+      result = "#{calling_code}#{result}"
       return Phony.normalize(result) if Phony.plausible?(result)
 
       result
