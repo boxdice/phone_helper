@@ -5,7 +5,7 @@ module PhoneHelper
   class Number
 
     def initialize(value, calling_code: nil, country: nil)
-      @value = value.strip if value
+      @value = value.gsub(/\s/, "") if value
       @calling_code = calling_code
       @country = country
     end
