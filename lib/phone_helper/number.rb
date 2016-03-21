@@ -67,8 +67,8 @@ module PhoneHelper
     end
 
     def normalize
-      result = @value.gsub(/\(0*(\d*)\)/, "\\1").gsub(/\D/, "").gsub(/\A0{2,}/, "+")
-      return Phony.normalize(result) if Phony.plausible?(result)
+      result = @value.gsub(/\(0*(\d*)\)/, "\\1")
+      return Phony.normalize(result) if result =~ /\A(\+|\A0{2,})/ && Phony.plausible?(result)
 
       result = result.gsub(/\A0+/, "")
       return result unless calling_code

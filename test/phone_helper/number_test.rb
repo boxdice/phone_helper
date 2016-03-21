@@ -46,6 +46,13 @@ module PhoneHelper
       assert_equal "432123456", phone.search_index
     end
 
+    def test_should_handle_valid_national_phone_number_if_prefix_matches_country_calling_code_and_country_is_given
+      phone = PhoneHelper::Number.new("0432123456", country: "Australia")
+      assert_equal "61432123456", phone.normalized
+      assert_equal "+61 432 123 456", phone.formatted
+      assert_equal "432123456", phone.search_index
+    end
+
     def test_should_not_add_leading_zero_if_not_present_in_original_number
       phone = PhoneHelper::Number.new("90312 3456")
       assert_equal "903123456", phone.normalized
