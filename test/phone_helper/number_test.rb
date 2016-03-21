@@ -67,6 +67,13 @@ module PhoneHelper
       assert_equal "212345678", phone.search_index
     end
 
+    def test_should_handle_number_with_too_many_zeroes
+      phone = PhoneHelper::Number.new("0006431234567")
+      assert_equal "6431234567", phone.normalized
+      assert_equal "+64 3 123 4567", phone.formatted
+      assert_equal "31234567", phone.search_index
+    end
+
     def test_plausible_should_return_true_if_number_can_be_formatted
       assert_equal true, PhoneHelper::Number.new("421 9 031 23456").plausible?
       assert_equal true, PhoneHelper::Number.new("09 03123-456", country: "Slovakia").plausible?
