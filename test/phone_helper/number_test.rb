@@ -25,6 +25,13 @@ module PhoneHelper
       assert_equal "903123456", phone.search_index
     end
 
+    def test_should_not_add_country_calling_code_if_the_result_would_be_invalid
+      phone = PhoneHelper::Number.new("123456", country: "Slovakia")
+      assert_equal "123456", phone.normalized
+      assert_equal "123456", phone.formatted
+      assert_equal "123456", phone.search_index
+    end
+
     def test_should_handle_valid_national_phone_number_if_given_calling_code
       phone = PhoneHelper::Number.new("09 0/3123 456", calling_code: "421")
       assert_equal "421903123456", phone.normalized

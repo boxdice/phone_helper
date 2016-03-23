@@ -70,11 +70,11 @@ module PhoneHelper
       result = @value.gsub(/\(0*(\d*)\)/, "\\1")
       return Phony.normalize(result) if result =~ /\A(\+|\A0{2,})/ && Phony.plausible?(result)
 
-      result = result.gsub(/\A0+/, "")
+      result = result.gsub(/\A0+/, "").gsub(/\D/, "")
       return result unless calling_code
 
-      result = "#{calling_code}#{result}"
-      return Phony.normalize(result) if Phony.plausible?(result)
+      with_country_calling_code = [calling_code, result].join
+      return Phony.normalize(with_country_calling_code) if Phony.plausible?(with_country_calling_code)
 
       result
     end
