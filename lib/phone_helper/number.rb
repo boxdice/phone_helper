@@ -1,45 +1,50 @@
-require "phony"
+require "phonelib"
 
 module PhoneHelper
 
   class Number
 
-    def initialize(value, calling_code: nil, country: nil)
-      @value = value.gsub(/\s/, "") if value
+    def initialize(original, calling_code: nil, country: nil)
+      @original = original
       @calling_code = calling_code
       @country = country
     end
 
     def plausible?
-      return unless @value
-      Phony.plausible?(normalized)
+      return unless @original
+      Phonelib.valid?(sanitized)
     end
 
     def normalized
-      return unless @value
-      @normalized ||= normalize
+      return unless @original
+      @normalized ||= sanitized.gsub(/\A0+/, "")
+    end
+
+    def sanitized
+      return unless @original
+      @sanitized ||= sanitize
     end
 
     def formatted
-      return unless @value
+      return unless @original
       @formatted ||= if plausible?
-        if calling_code || @value =~ /\A(00|\+)/
-          Phony.format(normalized, format: :international)
+        if calling_code || @original =~ /\A(00|\+)/
+          Phonelib.parse(normalized).international
         else
-          @value
+          @original
         end
       else
-        @value.gsub(/\D/, "")
+        @original.gsub(/\D/, "")
       end
     end
 
     def search_index
-      return unless @value
+      return unless @original
       @search_index ||= if plausible?
-        if calling_code || @value =~ /\A(00|\+)/
-          Phony.format(normalized, format: :national).gsub(/\A0+/, "").gsub(/\D/, "")
+        if calling_code || @original =~ /\A(00|\+)/
+          Phonelib.parse(normalized).national.gsub(/\A0+/, "").gsub(/\D/, "")
         else
-          @value.gsub(/\A0+/, "").gsub(/\D/, "")
+          @original.gsub(/\A0+/, "").gsub(/\D/, "")
         end
       else
         normalized
@@ -55,15 +60,15 @@ module PhoneHelper
       end
     end
 
-    def normalize
-      result = @value.gsub(/\(0*(\d*)\)/, "\\1")
-      return Phony.normalize(result) if result =~ /\A(\+|\A0{2,})/ && Phony.plausible?(result)
+    def sanitize
+      result = @original.gsub(/\(0*(\d*)\)/, "\\1").gsub(/\A(\+|0{2,})/, "+").scan(/(\A\+|\d)/).join
 
-      result = result.gsub(/\A0+/, "").gsub(/\D/, "")
+      return Phonelib.parse(result).sanitized if Phonelib.valid?(result)
+
       return result unless calling_code
 
-      with_country_calling_code = [calling_code, result].join
-      return Phony.normalize(with_country_calling_code) if Phony.plausible?(with_country_calling_code)
+      with_country_calling_code = [calling_code, result.gsub(/\A0+/, "")].join
+      return Phonelib.parse(with_country_calling_code).sanitized if Phonelib.valid?(with_country_calling_code)
 
       result
     end
