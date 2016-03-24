@@ -46,17 +46,6 @@ module PhoneHelper
       end
     end
 
-    def split
-      return unless @value
-      if plausible?
-        parts = Phony.split(normalized)
-        calling_code = parts.shift
-        [calling_code, parts.join]
-      else
-        [nil, "0#{normalized}"]
-      end
-    end
-
     private
 
     def calling_code
