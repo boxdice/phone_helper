@@ -27,11 +27,11 @@ module PhoneHelper
       end
     end
 
-    private
-
     def keys
-      @keys ||= [alpha2, alpha3, name, calling_code].flatten.compact.map(&:downcase)
+      @keys ||= [alpha2, alpha3, name, calling_codes].flatten.compact.map(&:downcase)
     end
+
+    private
 
     def data
       Phonelib.phone_data[alpha2]
