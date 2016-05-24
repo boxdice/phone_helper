@@ -27,7 +27,8 @@ module PhoneHelper
         hash = {}
         all.each do |country|
           country.keys.each do |key|
-            hash[key] = country
+            hash[key] ||= []
+            hash[key] << country
           end
         end
         hash
