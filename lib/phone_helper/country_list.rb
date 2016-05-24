@@ -9,7 +9,7 @@ module PhoneHelper
     module_function
 
     def [](key)
-      all.select { |country| country.match?(key) }
+      all.detect { |country| country.match?(key) }
     end
 
     def all
