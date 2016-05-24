@@ -43,8 +43,8 @@ module PhoneHelper
         unpack(country_code, Regexp.last_match(1)) + unpack(country_code, Regexp.last_match(2))
       when /\A(.*)\[(.*)\](.*)\z/
         digits = Regexp.last_match(2).chars
-        digits.map { |digit| "#{country_code} #{Regexp.last_match(1)}#{digit}#{Regexp.last_match(3)}" }
-      when /./ then ["#{country_code} #{leading_digits}"]
+        digits.map { |digit| "#{country_code}#{Regexp.last_match(1)}#{digit}#{Regexp.last_match(3)}" }
+      when /./ then ["#{country_code}#{leading_digits}"]
       else [country_code]
       end
     end
