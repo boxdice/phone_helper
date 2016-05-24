@@ -9,7 +9,7 @@ module PhoneHelper
     module_function
 
     def [](key)
-      all.detect { |country| country.match?(key) }
+      to_hash[key.downcase] if key
     end
 
     def all
@@ -19,6 +19,18 @@ module PhoneHelper
         CSV.parse(csv).map do |alpha2, alpha3, name|
           Country.new(alpha2, alpha3, name)
         end
+      end
+    end
+
+    def to_hash
+      @as_hash ||= begin
+        hash = {}
+        all.each do |country|
+          country.keys.each do |key|
+            hash[key] = country
+          end
+        end
+        hash
       end
     end
 
