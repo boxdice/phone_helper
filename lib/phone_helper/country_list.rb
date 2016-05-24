@@ -16,8 +16,8 @@ module PhoneHelper
       @all ||= begin
         path = File.expand_path("../../../data/countries.csv", __FILE__)
         csv = File.read(path)
-        CSV.parse(csv).map do |row|
-          Country.new(*row)
+        CSV.parse(csv).map do |alpha2, alpha3, name|
+          Country.new(alpha2, alpha3, name)
         end
       end
     end
