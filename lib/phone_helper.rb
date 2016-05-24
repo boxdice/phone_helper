@@ -23,8 +23,4 @@ module PhoneHelper
     Number.new(value, country: country, calling_code: calling_code).search_index
   end
 
-  def split(value, country: nil, calling_code: nil)
-    Number.new(value, country: country, calling_code: calling_code).split
-  end
-
 end
