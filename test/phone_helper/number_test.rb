@@ -4,6 +4,14 @@ module PhoneHelper
 
   class NumberTest < Minitest::Test
 
+    def test_calling_code
+      assert_nil PhoneHelper::Number.new(nil).calling_code
+      assert_nil PhoneHelper::Number.new("999123123").calling_code
+      assert_nil PhoneHelper::Number.new("999123123", country: "Invalid Country").calling_code
+      assert_equal "421", PhoneHelper::Number.new("999123123", country: "Slovakia").calling_code
+      assert_equal "61", PhoneHelper::Number.new("999123123", country: "Australia").calling_code
+    end
+
     def test_sanitized
       assert_nil PhoneHelper::Number.new(nil).sanitized
       assert_equal "421903123456", PhoneHelper::Number.new("+4 219 031234 56").sanitized
