@@ -4,108 +4,60 @@ module PhoneHelper
 
   class NumberTest < Minitest::Test
 
-    def test_should_handle_nil
-      phone = PhoneHelper::Number.new(nil)
-      assert_nil phone.sanitized
-      assert_nil phone.normalized
-      assert_nil phone.formatted
-      assert_nil phone.search_index
+    def test_sanitized
+      assert_nil PhoneHelper::Number.new(nil).sanitized
+      assert_equal "421903123456", PhoneHelper::Number.new("+4 219 031234 56").sanitized
+      assert_equal "421903123456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").sanitized
+      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").sanitized
+      assert_equal "421903123456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").sanitized
+      assert_equal "0903123456", PhoneHelper::Number.new("0 90312 3456").sanitized
+      assert_equal "0432123456", PhoneHelper::Number.new("0432123456").sanitized
+      assert_equal "61432123456", PhoneHelper::Number.new("0432123456", country: "Australia").sanitized
+      assert_equal "903123456", PhoneHelper::Number.new("90312 3456").sanitized
+      assert_equal "421212345678", PhoneHelper::Number.new("+421 (2) 1234 5678").sanitized
+      assert_equal "421212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").sanitized
+      assert_equal "64212345678", PhoneHelper::Number.new("00064212345678").sanitized
     end
 
-    def test_should_handle_valid_formatted_phone_number
-      phone = PhoneHelper::Number.new("+4 219 031234 56")
-      assert_equal "421903123456", phone.sanitized
-      assert_equal "421903123456", phone.normalized
-      assert_equal "+421 903 123 456", phone.formatted
-      assert_equal "903123456", phone.search_index
+    def test_normalized
+      assert_nil PhoneHelper::Number.new(nil).normalized
+      assert_equal "421903123456", PhoneHelper::Number.new("+4 219 031234 56").normalized
+      assert_equal "421903123456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").normalized
+      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").normalized
+      assert_equal "421903123456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").normalized
+      assert_equal "903123456", PhoneHelper::Number.new("0 90312 3456").normalized
+      assert_equal "432123456", PhoneHelper::Number.new("0432123456").normalized
+      assert_equal "61432123456", PhoneHelper::Number.new("0432123456", country: "Australia").normalized
+      assert_equal "903123456", PhoneHelper::Number.new("90312 3456").normalized
+      assert_equal "421212345678", PhoneHelper::Number.new("+421 (2) 1234 5678").normalized
+      assert_equal "421212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").normalized
+      assert_equal "64212345678", PhoneHelper::Number.new("00064212345678").normalized
     end
 
-    def test_should_handle_valid_national_phone_number_if_given_country
-      phone = PhoneHelper::Number.new("09 03123-456", country: "Slovakia")
-      assert_equal "421903123456", phone.sanitized
-      assert_equal "421903123456", phone.normalized
-      assert_equal "+421 903 123 456", phone.formatted
-      assert_equal "903123456", phone.search_index
+    def test_formatted
+      assert_nil PhoneHelper::Number.new(nil).formatted
+      assert_equal "+421 903 123 456", PhoneHelper::Number.new("+4 219 031234 56").formatted
+      assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").formatted
+      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").formatted
+      assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").formatted
+      assert_equal "+421 2/123 456 78", PhoneHelper::Number.new("+421 (2) 1234 5678").formatted
+      assert_equal "+421 2/123 456 78", PhoneHelper::Number.new("+421 (02) 1234 5678").formatted
+      assert_equal "+64 21 234 5678", PhoneHelper::Number.new("00064212345678").formatted
     end
 
-    def test_should_not_add_country_calling_code_if_the_result_would_be_invalid
-      phone = PhoneHelper::Number.new("123456", country: "Slovakia")
-      assert_equal "123456", phone.sanitized
-      assert_equal "123456", phone.normalized
-      assert_equal "123456", phone.formatted
-      assert_equal "123456", phone.search_index
-    end
-
-    def test_should_handle_valid_national_phone_number_if_given_calling_code
-      phone = PhoneHelper::Number.new("09 0/3123 456", calling_code: "421")
-      assert_equal "421903123456", phone.sanitized
-      assert_equal "421903123456", phone.normalized
-      assert_equal "+421 903 123 456", phone.formatted
-      assert_equal "903123456", phone.search_index
-    end
-
-    def test_should_handle_valid_national_phone_number_if_not_given_country_or_calling_code
-      phone = PhoneHelper::Number.new("0 90312 3456")
-      assert_equal "0903123456", phone.sanitized
-      assert_equal "903123456", phone.normalized
-      assert_equal "0903123456", phone.formatted
-      assert_equal "903123456", phone.search_index
-    end
-
-    def test_should_handle_valid_national_phone_number_if_prefix_matches_country_calling_code
-      phone = PhoneHelper::Number.new("0432123456")
-      assert_equal "0432123456", phone.sanitized
-      assert_equal "432123456", phone.normalized
-      assert_equal "0432123456", phone.formatted
-      assert_equal "432123456", phone.search_index
-    end
-
-    def test_should_handle_valid_national_phone_number_if_prefix_matches_country_calling_code_and_country_is_given
-      phone = PhoneHelper::Number.new("0432123456", country: "Australia")
-      assert_equal "61432123456", phone.sanitized
-      assert_equal "61432123456", phone.normalized
-      assert_equal "+61 432 123 456", phone.formatted
-      assert_equal "432123456", phone.search_index
-    end
-
-    def test_should_not_add_leading_zero_if_not_present_in_original_number
-      phone = PhoneHelper::Number.new("90312 3456")
-      assert_equal "903123456", phone.sanitized
-      assert_equal "903123456", phone.normalized
-      assert_equal "903123456", phone.formatted
-      assert_equal "903123456", phone.search_index
-    end
-
-    def test_should_handle_formatted_number
-      phone = PhoneHelper::Number.new("+421 (2) 1234 5678")
-      assert_equal "421212345678", phone.sanitized
-      assert_equal "421212345678", phone.normalized
-      assert_equal "+421 2/123 456 78", phone.formatted
-      assert_equal "212345678", phone.search_index
-    end
-
-    def test_should_handle_number_with_0_inside_brackets
-      phone = PhoneHelper::Number.new("+421 (02) 1234 5678")
-      assert_equal "421212345678", phone.sanitized
-      assert_equal "421212345678", phone.normalized
-      assert_equal "+421 2/123 456 78", phone.formatted
-      assert_equal "212345678", phone.search_index
-    end
-
-    def test_should_handle_number_with_too_many_zeroes
-      phone = PhoneHelper::Number.new("00064212345678")
-      assert_equal true, phone.plausible?
-      assert_equal "64212345678", phone.sanitized
-      assert_equal "64212345678", phone.normalized
-      assert_equal "+64 21 234 5678", phone.formatted
-      assert_equal "212345678", phone.search_index
-    end
-
-    def test_plausible_should_return_true_if_number_can_be_formatted
-      assert_equal true, PhoneHelper::Number.new("421 9 031 23456").plausible?
-      assert_equal true, PhoneHelper::Number.new("09 03123-456", country: "Slovakia").plausible?
-      assert_equal true, PhoneHelper::Number.new("090312345/6", calling_code: "421").plausible?
-      assert_equal false, PhoneHelper::Number.new("09 03123-456").plausible?
+    def test_search_index
+      assert_nil PhoneHelper::Number.new(nil).search_index
+      assert_equal "903123456", PhoneHelper::Number.new("+4 219 031234 56").search_index
+      assert_equal "903123456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").search_index
+      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").search_index
+      assert_equal "903123456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").search_index
+      assert_equal "903123456", PhoneHelper::Number.new("0 90312 3456").search_index
+      assert_equal "432123456", PhoneHelper::Number.new("0432123456").search_index
+      assert_equal "432123456", PhoneHelper::Number.new("0432123456", country: "Australia").search_index
+      assert_equal "903123456", PhoneHelper::Number.new("90312 3456").search_index
+      assert_equal "212345678", PhoneHelper::Number.new("+421 (2) 1234 5678").search_index
+      assert_equal "212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").search_index
+      assert_equal "212345678", PhoneHelper::Number.new("00064212345678").search_index
     end
 
   end
