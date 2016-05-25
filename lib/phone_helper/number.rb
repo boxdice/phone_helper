@@ -58,7 +58,7 @@ module PhoneHelper
     def country_code
       @country_code ||= if @country
         countries = CountryList[@country]
-        countries.first.alpha2 if countries.size == 1
+        countries.first.alpha2 if countries && countries.size == 1
       end
     end
 

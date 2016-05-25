@@ -12,6 +12,14 @@ module PhoneHelper
       assert_equal "61", PhoneHelper::Number.new("999123123", country: "Australia").calling_code
     end
 
+    def test_country_code
+      assert_nil PhoneHelper::Number.new(nil).country_code
+      assert_nil PhoneHelper::Number.new("999123123").country_code
+      assert_nil PhoneHelper::Number.new("999123123", country: "Invalid Country").country_code
+      assert_equal "SK", PhoneHelper::Number.new("999123123", country: "Slovakia").country_code
+      assert_equal "AU", PhoneHelper::Number.new("999123123", country: "Australia").country_code
+    end
+
     def test_sanitized
       assert_nil PhoneHelper::Number.new(nil).sanitized
       assert_equal "421903123456", PhoneHelper::Number.new("+4 219 031234 56").sanitized
