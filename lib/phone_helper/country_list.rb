@@ -12,6 +12,19 @@ module PhoneHelper
       to_hash[key.downcase] if key
     end
 
+    def guess_country(number)
+      number = number.to_s
+      until number.empty?
+        if (countries = to_hash[number])
+          country = countries.first if countries.length == 1
+          country ||= countries.detect(&:main_country_for_code)
+          return country && country.alpha2
+        end
+        number = number[0..-2]
+      end
+      nil
+    end
+
     def all
       @all ||= begin
         path = File.expand_path("../../../data/countries.csv", __FILE__)

@@ -41,4 +41,10 @@ class CountryListTest < Minitest::Test
     end
   end
 
+  def test_guess_country
+    assert_equal "SK", PhoneHelper::CountryList.guess_country("421903123456")
+    assert_equal "AU", PhoneHelper::CountryList.guess_country("61312345678") # chooses main country for code
+    assert_nil PhoneHelper::CountryList.guess_country("999123456789")
+  end
+
 end
