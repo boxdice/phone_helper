@@ -12,7 +12,7 @@ module PhoneHelper
 
     def plausible?
       return unless @original
-      Phonelib.valid?(sanitized)
+      phone.valid?
     end
 
     def normalized
@@ -28,11 +28,7 @@ module PhoneHelper
     def formatted
       return unless @original
       @formatted ||= if plausible?
-        if calling_code || @original =~ /\A(00|\+)/
-          Phonelib.parse(normalized).international
-        else
-          @original
-        end
+        phone.international
       else
         @original.gsub(/\D/, "")
       end
@@ -42,7 +38,7 @@ module PhoneHelper
       return unless @original
       @search_index ||= if plausible?
         if calling_code || @original =~ /\A(00|\+)/
-          Phonelib.parse(normalized).national.gsub(/\A0+/, "").gsub(/\D/, "")
+          phone.national.gsub(/\A0+/, "").gsub(/\D/, "")
         else
           @original.gsub(/\A0+/, "").gsub(/\D/, "")
         end
@@ -59,6 +55,13 @@ module PhoneHelper
       end
     end
 
+    def country_code
+      @country_code ||= if @country
+        countries = CountryList[@country]
+        countries.first.alpha2 if countries.size == 1
+      end
+    end
+
     private
 
     def normalize
@@ -66,16 +69,30 @@ module PhoneHelper
     end
 
     def sanitize
-      result = @original.gsub(/\(0*(\d*)\)/, "\\1").gsub(/\A(\+|0{2,})/, "+").scan(/(\A\+|\d)/).join
+      phone.sanitized
+    end
 
-      return Phonelib.parse(result).sanitized if Phonelib.valid?(result)
+    def phone
+      @phone ||= build_phone
+    end
 
-      return result unless calling_code
+    def build_phone
+      number = @original.gsub(/\(0*(\d*)\)/, "\\1").gsub(/\A(\+|0{2,})/, "+").scan(/(\A\+|\d)/).join
+      if calling_code
+        number2 = [calling_code, number.gsub(/\A0+/, "")].join
+        phone2 = build_phone_from_number(number2)
+        return phone2 if phone2.valid?
+      end
+      build_phone_from_number(number)
+    end
 
-      with_country_calling_code = [calling_code, result.gsub(/\A0+/, "")].join
-      return Phonelib.parse(with_country_calling_code).sanitized if Phonelib.valid?(with_country_calling_code)
+    def build_phone_from_number(number)
+      digits = number.scan(/\d+/).join
+      Phonelib::Phone.new(number, country_code || CountryList.guess_country(digits))
+    end
 
-      result
+    def digits
+      @digits ||= @original.scan(/\d+/).join
     end
 
   end
