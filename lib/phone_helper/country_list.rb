@@ -28,7 +28,7 @@ module PhoneHelper
     def all
       @all ||= begin
         path = File.expand_path("../../../data/countries.csv", __FILE__)
-        csv = File.read(path)
+        csv = File.read(path, encoding: "UTF-8")
         CSV.parse(csv).map do |alpha2, alpha3, name|
           Country.new(alpha2, alpha3, name)
         end
