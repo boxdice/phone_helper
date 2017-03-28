@@ -56,8 +56,8 @@ module PhoneHelper
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").formatted
       assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").formatted
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").formatted
-      assert_equal "+421 2/123 456 78", PhoneHelper::Number.new("+421 (2) 1234 5678").formatted
-      assert_equal "+421 2/123 456 78", PhoneHelper::Number.new("+421 (02) 1234 5678").formatted
+      assert_equal "+421 2/623 456 78", PhoneHelper::Number.new("+421 (2) 6234 5678").formatted
+      assert_equal "+421 2/623 456 78", PhoneHelper::Number.new("+421 (02) 6234 5678").formatted
       assert_equal "+64 21 234 5678", PhoneHelper::Number.new("00064212345678").formatted
     end
 
@@ -71,8 +71,8 @@ module PhoneHelper
       assert_equal "432123456", PhoneHelper::Number.new("0432123456").search_index
       assert_equal "432123456", PhoneHelper::Number.new("0432123456", country: "Australia").search_index
       assert_equal "903123456", PhoneHelper::Number.new("90312 3456").search_index
-      assert_equal "212345678", PhoneHelper::Number.new("+421 (2) 1234 5678").search_index
-      assert_equal "212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").search_index
+      assert_equal "262345678", PhoneHelper::Number.new("+421 (2) 6234 5678").search_index
+      assert_equal "262345678", PhoneHelper::Number.new("+421 (02) 6234 5678").search_index
       assert_equal "212345678", PhoneHelper::Number.new("00064212345678").search_index
     end
 
