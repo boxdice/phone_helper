@@ -88,6 +88,8 @@ module PhoneHelper
 
     def build_phone_from_number(number)
       digits = number.scan(/\d+/).join
+      phone_without_country_code = Phonelib::Phone.new(number)
+      return phone_without_country_code if phone_without_country_code.valid?
       Phonelib::Phone.new(number, country_code)
     end
 

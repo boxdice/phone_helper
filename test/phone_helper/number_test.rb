@@ -62,6 +62,8 @@ module PhoneHelper
       assert_equal "+421 2/623 456 78", PhoneHelper::Number.new("+421 (2) 6234 5678").formatted
       assert_equal "+421 2/623 456 78", PhoneHelper::Number.new("+421 (02) 6234 5678").formatted
       assert_equal "+64 21 234 5678", PhoneHelper::Number.new("00064212345678").formatted
+      assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444").formatted
+      assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444", country: "Australia").formatted
     end
 
     def test_search_index
