@@ -88,7 +88,7 @@ module PhoneHelper
 
     def build_phone_from_number(number)
       digits = number.scan(/\d+/).join
-      Phonelib::Phone.new(number, country_code || CountryList.guess_country(digits))
+      Phonelib::Phone.new(number, country_code)
     end
 
     def digits
