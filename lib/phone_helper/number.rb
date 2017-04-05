@@ -86,12 +86,14 @@ module PhoneHelper
 
     def try_phone_with_fixed_line_prefix(number)
       return unless country_code && fixed_line_prefix
+      return if @original =~ /\A0[^0]/
       number2 = [fixed_line_prefix, number.gsub(/\A0+/, "")].join
       phone2 = build_phone_from_number(number2)
       phone2 if phone2.valid?
     end
 
     def try_phone_with_calling_code(number)
+      return unless calling_code
       number2 = [calling_code, number.gsub(/\A0+/, "")].join
       phone2 = build_phone_from_number(number2)
       phone2 if phone2.valid?
