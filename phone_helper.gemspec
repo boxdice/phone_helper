@@ -1,7 +1,8 @@
 # coding: utf-8
+
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'phone_helper/version'
+require "phone_helper/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "phone_helper"
@@ -9,13 +10,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Vladimír Bobeš Tužinský"]
   spec.email         = ["vladimir@tuzinsky.com"]
 
-  spec.summary       = %q{Library for parsing and formatting phone numbers.}
+  spec.summary       = "Library for parsing and formatting phone numbers."
 
-  if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = ""
-  else
+  unless spec.respond_to?(:metadata)
     raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
   end
+  spec.metadata["allowed_push_host"] = ""
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"

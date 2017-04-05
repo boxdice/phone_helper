@@ -14,7 +14,7 @@ Documentation:
   Enabled: false
 
 Lint/EndAlignment:
-  AlignWith: variable
+  EnforcedStyleAlignWith: variable
 
 Lint/LiteralInInterpolation:
   Enabled: true
@@ -31,6 +31,9 @@ Metrics/ClassLength:
 
 Metrics/LineLength:
   Max: 120
+  Exclude:
+    - db/migrate/*
+    - test/**/*
 
 Metrics/MethodLength:
   Exclude:
@@ -44,7 +47,7 @@ Style/AutoResourceCleanup:
   Enabled: true
 
 Style/CaseIndentation:
-  IndentWhenRelativeTo: end
+  EnforcedStyle: end
 
 Style/DotPosition:
   EnforcedStyle: trailing
