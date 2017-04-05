@@ -4,11 +4,12 @@ module PhoneHelper
 
   class Number
 
-    def initialize(original, calling_code: nil, country: nil, postcode: nil)
+    def initialize(original, options = nil)
       @original = original
-      @calling_code = calling_code
-      @country = country
-      @postcode = postcode
+      options ||= {}
+      @calling_code = options[:calling_code]
+      @country = options[:country]
+      @postcode = options[:postcode]
     end
 
     def plausible?

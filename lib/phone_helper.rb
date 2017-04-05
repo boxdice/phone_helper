@@ -7,20 +7,20 @@ module PhoneHelper
 
   module_function
 
-  def plausible?(value, country: nil, calling_code: nil, postcode: nil)
-    Number.new(value, country: country, calling_code: calling_code, postcode: postcode).plausible?
+  def plausible?(value, options = nil)
+    Number.new(value, options).plausible?
   end
 
-  def normalize(value, country: nil, calling_code: nil, postcode: nil)
-    Number.new(value, country: country, calling_code: calling_code, postcode: postcode).normalized
+  def normalize(value, options = nil)
+    Number.new(value, options).normalized
   end
 
-  def format(value, country: nil, calling_code: nil, postcode: nil)
-    Number.new(value, country: country, calling_code: calling_code, postcode: postcode).formatted
+  def format(value, options = nil)
+    Number.new(value, options).formatted
   end
 
-  def search_index(value, country: nil, calling_code: nil, postcode: nil)
-    Number.new(value, country: country, calling_code: calling_code, postcode: postcode).search_index
+  def search_index(value, options = nil)
+    Number.new(value, options).search_index
   end
 
 end
