@@ -64,6 +64,10 @@ module PhoneHelper
       assert_equal "+64 21 234 5678", PhoneHelper::Number.new("00064212345678").formatted
       assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444").formatted
       assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444", country: "Australia").formatted
+      assert_equal "0498574619", PhoneHelper::Number.new("0498574619").formatted
+
+      skip # https://github.com/daddyz/phonelib/issues/72
+      assert_equal "49123456", PhoneHelper::Number.new("49123456").formatted
     end
 
     def test_search_index
@@ -88,7 +92,6 @@ module PhoneHelper
       assert_equal "+61 3 4954 2477", PhoneHelper::Number.new("49542477", country: "Australia", postcode: "3206").formatted
       assert_equal "+49 4954 2477", PhoneHelper::Number.new("49542477", country: "Germany", postcode: "3206").formatted
       assert_equal "+49 5424 77", PhoneHelper::Number.new("49542477", country: "Japan", postcode: "3206").formatted
-      assert_equal "0498574619", PhoneHelper::Number.new("0498574619").formatted
     end
 
   end

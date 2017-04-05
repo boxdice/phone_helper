@@ -85,9 +85,9 @@ module PhoneHelper
     end
 
     def try_phone_with_fixed_line_prefix(number)
-      return unless country_code && fixed_line_prefix
-      return if @original =~ /\A0[^0]/
-      number2 = [fixed_line_prefix, number.gsub(/\A0+/, "")].join
+      return if number =~ /\A0[^0]/
+      return unless calling_code && fixed_line_prefix
+      number2 = [calling_code, fixed_line_prefix, number.gsub(/\A0+/, "")].join
       phone2 = build_phone_from_number(number2)
       phone2 if phone2.valid?
     end
@@ -100,8 +100,10 @@ module PhoneHelper
     end
 
     def build_phone_from_number(number)
-      phone_without_country_code = Phonelib::Phone.new(number)
-      return phone_without_country_code if phone_without_country_code.valid?
+      p = Phonelib::Phone.new("+#{number}")
+      return p if p.valid?
+      p = Phonelib::Phone.new(number)
+      return p if p.valid?
       Phonelib::Phone.new(number, country_code)
     end
 
