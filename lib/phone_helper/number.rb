@@ -4,10 +4,11 @@ module PhoneHelper
 
   class Number
 
-    def initialize(original, calling_code: nil, country: nil)
+    def initialize(original, calling_code: nil, country: nil, postcode: nil)
       @original = original
       @calling_code = calling_code
       @country = country
+      @postcode = postcode
     end
 
     def plausible?
@@ -78,16 +79,25 @@ module PhoneHelper
 
     def build_phone
       number = @original.gsub(/\(0*(\d*)\)/, "\\1").gsub(/\A(\+|0{2,})/, "+").scan(/(\A\+|\d)/).join
-      if calling_code
-        number2 = [calling_code, number.gsub(/\A0+/, "")].join
-        phone2 = build_phone_from_number(number2)
-        return phone2 if phone2.valid?
-      end
-      build_phone_from_number(number)
+      try_phone_with_fixed_line_prefix(number) ||
+        try_phone_with_calling_code(number) ||
+        build_phone_from_number(number)
+    end
+
+    def try_phone_with_fixed_line_prefix(number)
+      return unless country_code && fixed_line_prefix
+      number2 = [fixed_line_prefix, number.gsub(/\A0+/, "")].join
+      phone2 = build_phone_from_number(number2)
+      phone2 if phone2.valid?
+    end
+
+    def try_phone_with_calling_code(number)
+      number2 = [calling_code, number.gsub(/\A0+/, "")].join
+      phone2 = build_phone_from_number(number2)
+      phone2 if phone2.valid?
     end
 
     def build_phone_from_number(number)
-      digits = number.scan(/\d+/).join
       phone_without_country_code = Phonelib::Phone.new(number)
       return phone_without_country_code if phone_without_country_code.valid?
       Phonelib::Phone.new(number, country_code)
@@ -95,6 +105,20 @@ module PhoneHelper
 
     def digits
       @digits ||= @original.scan(/\d+/).join
+    end
+
+    def fixed_line_prefix
+      return nil unless @country == "Australia" && @postcode
+      @fixed_line_prefix ||= fixed_line_prefix_australia
+    end
+
+    def fixed_line_prefix_australia
+      case @postcode.to_s
+      when "0200", /^[12]/ then "2"
+      when /^[056]/ then "8"
+      when /^[49]/ then "7"
+      when /^[378]/ then "3"
+      end
     end
 
   end

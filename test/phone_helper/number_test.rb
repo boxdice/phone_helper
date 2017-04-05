@@ -81,6 +81,13 @@ module PhoneHelper
       assert_equal "212345678", PhoneHelper::Number.new("00064212345678").search_index
     end
 
+    def test_guess_australian_landline_from_postcode
+      assert_equal "+61 2 4954 2477", PhoneHelper::Number.new("49542477", country: "Australia", postcode: "2281").formatted
+      assert_equal "+61 3 4954 2477", PhoneHelper::Number.new("49542477", country: "Australia", postcode: "3206").formatted
+      assert_equal "+49 4954 2477", PhoneHelper::Number.new("49542477", country: "Germany", postcode: "3206").formatted
+      assert_equal "+49 5424 77", PhoneHelper::Number.new("49542477", country: "Japan", postcode: "3206").formatted
+    end
+
   end
 
 end
