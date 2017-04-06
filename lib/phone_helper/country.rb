@@ -55,11 +55,11 @@ module PhoneHelper
       @keys ||= [alpha2, alpha3, name, country_code, calling_codes].flatten.compact.map(&:downcase).uniq
     end
 
-    private
-
     def data
       Phonelib.phone_data[alpha2]
     end
+
+    private
 
     def unpack(leading_digits)
       case leading_digits
