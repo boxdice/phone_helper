@@ -18,7 +18,7 @@ module PhoneHelper
         if (countries = to_hash[number])
           country = countries.first if countries.length == 1
           country ||= countries.detect(&:main_country_for_code)
-          return country && country.alpha2
+          return country.alpha2 if country
         end
         number = number[0..-2]
       end

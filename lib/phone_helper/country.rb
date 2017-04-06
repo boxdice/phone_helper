@@ -15,14 +15,17 @@ module PhoneHelper
     end
 
     def main_country_for_code
-      data && data[:main_country_for_code]
+      return unless data
+      data[:main_country_for_code]
     end
 
     def country_code
+      return unless data
       data[:country_code]
     end
 
     def leading_digits
+      return unless data
       @leading_digits ||= unpack(data[:leading_digits])
     end
 
