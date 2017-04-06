@@ -29,6 +29,16 @@ module PhoneHelper
       @leading_digits ||= unpack(data[:leading_digits])
     end
 
+    def calling_code
+      return unless data
+      @calling_code ||=
+        if calling_codes.size == 1
+          calling_codes.first
+        else
+          country_code
+        end
+    end
+
     def calling_codes
       return unless data
       @calling_codes ||=
