@@ -18,12 +18,18 @@ module PhoneHelper
       data && data[:main_country_for_code]
     end
 
+    def country_code
+      data[:country_code]
+    end
+
+    def leading_digits
+      @leading_digits ||= unpack(data[:leading_digits])
+    end
+
     def calling_codes
       return unless data
-      @calling_codes ||= begin
-        country_code = data[:country_code]
-        leading_digits = data[:leading_digits]
-        unpack(country_code, leading_digits)
+      @calling_codes ||= leading_digits.map do |digits|
+        [country_code, digits].join
       end
     end
 
@@ -37,15 +43,14 @@ module PhoneHelper
       Phonelib.phone_data[alpha2]
     end
 
-    def unpack(country_code, leading_digits)
+    def unpack(leading_digits)
       case leading_digits
       when /\A(.*)\|(.*)\z/
-        unpack(country_code, Regexp.last_match(1)) + unpack(country_code, Regexp.last_match(2))
+        unpack(Regexp.last_match(1)) + unpack(Regexp.last_match(2))
       when /\A(.*)\[(.*)\](.*)\z/
         digits = Regexp.last_match(2).chars
-        digits.map { |digit| "#{country_code}#{Regexp.last_match(1)}#{digit}#{Regexp.last_match(3)}" }
-      when /./ then ["#{country_code}#{leading_digits}"]
-      else [country_code]
+        digits.map { |digit| "#{Regexp.last_match(1)}#{digit}#{Regexp.last_match(3)}" }
+      else [leading_digits]
       end
     end
 
