@@ -4,7 +4,7 @@ module PhoneHelper
 
     attr_reader :alpha2, :alpha3, :name
 
-    def initialize(alpha2, alpha3, name)
+    def initialize(alpha2, alpha3 = nil, name = nil)
       @alpha2 = alpha2 unless alpha2 && alpha2.empty?
       @alpha3 = alpha3 unless alpha3 && alpha3.empty?
       @name = name
