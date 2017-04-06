@@ -28,9 +28,14 @@ module PhoneHelper
 
     def calling_codes
       return unless data
-      @calling_codes ||= leading_digits.map do |digits|
-        [country_code, digits].join
-      end
+      @calling_codes ||=
+        if leading_digits
+          leading_digits.map do |digits|
+            [country_code, digits].join
+          end
+        else
+          [country_code]
+        end
     end
 
     def keys
@@ -50,7 +55,8 @@ module PhoneHelper
       when /\A(.*)\[(.*)\](.*)\z/
         digits = Regexp.last_match(2).chars
         digits.map { |digit| "#{Regexp.last_match(1)}#{digit}#{Regexp.last_match(3)}" }
-      else [leading_digits]
+      when /./
+        [leading_digits]
       end
     end
 
