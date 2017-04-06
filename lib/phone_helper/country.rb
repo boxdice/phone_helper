@@ -52,7 +52,7 @@ module PhoneHelper
     end
 
     def keys
-      @keys ||= [alpha2, alpha3, name, calling_codes].flatten.compact.map(&:downcase)
+      @keys ||= [alpha2, alpha3, name, country_code, calling_codes].flatten.compact.map(&:downcase).uniq
     end
 
     private
