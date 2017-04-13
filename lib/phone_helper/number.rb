@@ -32,7 +32,22 @@ module PhoneHelper
       @formatted ||= if plausible?
         phone.international
       else
-        @original.gsub(/\D/, "")
+        digits
+      end
+    end
+    alias international formatted
+
+    def prefix
+      return unless @original
+      @prefix ||= phone.country_code if plausible?
+    end
+
+    def national
+      return unless @original
+      @formatted ||= if plausible?
+        phone.national
+      else
+        digits
       end
     end
 
@@ -79,6 +94,7 @@ module PhoneHelper
     end
 
     def build_phone
+      return unless @original
       number = @original.gsub(/\(0*(\d*)\)/, "\\1").gsub(/\A(\+|0{2,})/, "+").scan(/(\A\+|\d)/).join
       try_phone_with_fixed_line_prefix(number) ||
         try_phone_with_calling_code(number) ||
@@ -109,7 +125,7 @@ module PhoneHelper
     end
 
     def digits
-      @digits ||= @original.scan(/\d+/).join
+      @digits ||= @original.gsub(/\D/, "")
     end
 
     def fixed_line_prefix

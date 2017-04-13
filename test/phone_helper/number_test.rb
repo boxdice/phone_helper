@@ -70,6 +70,57 @@ module PhoneHelper
       assert_equal "49123456", PhoneHelper::Number.new("49123456").formatted
     end
 
+    def test_international
+      assert_nil PhoneHelper::Number.new(nil).international
+      assert_equal "+421 903 123 456", PhoneHelper::Number.new("+4 219 031234 56").international
+      assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").international
+      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").international
+      assert_equal "23456789", PhoneHelper::Number.new("23456789").international
+      assert_equal "+421 2/345 678 90", PhoneHelper::Number.new("234567890", country: "Slovakia").international
+      assert_equal "+421 2/345 678 90", PhoneHelper::Number.new("0234567890", country: "Slovakia").international
+      assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").international
+      assert_equal "+421 2/623 456 78", PhoneHelper::Number.new("+421 (2) 6234 5678").international
+      assert_equal "+421 2/623 456 78", PhoneHelper::Number.new("+421 (02) 6234 5678").international
+      assert_equal "+64 21 234 5678", PhoneHelper::Number.new("00064212345678").international
+      assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444").international
+      assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444", country: "Australia").international
+      assert_equal "0498574619", PhoneHelper::Number.new("0498574619").international
+    end
+
+    def test_prefix
+      assert_nil PhoneHelper::Number.new(nil).prefix
+      assert_equal "421", PhoneHelper::Number.new("+4 219 031234 56").prefix
+      assert_equal "421", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").prefix
+      assert_nil PhoneHelper::Number.new("123456", country: "Slovakia").prefix
+      assert_nil PhoneHelper::Number.new("23456789").prefix
+      assert_equal "421", PhoneHelper::Number.new("234567890", country: "Slovakia").prefix
+      assert_equal "421", PhoneHelper::Number.new("0234567890", country: "Slovakia").prefix
+      assert_equal "421", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").prefix
+      assert_equal "421", PhoneHelper::Number.new("+421 (2) 6234 5678").prefix
+      assert_equal "421", PhoneHelper::Number.new("+421 (02) 6234 5678").prefix
+      assert_equal "64", PhoneHelper::Number.new("00064212345678").prefix
+      assert_equal "81", PhoneHelper::Number.new("81444111444").prefix
+      assert_equal "81", PhoneHelper::Number.new("81444111444", country: "Australia").prefix
+      assert_nil PhoneHelper::Number.new("0498574619").prefix
+    end
+
+    def test_national
+      assert_nil PhoneHelper::Number.new(nil).national
+      assert_equal "0903 123 456", PhoneHelper::Number.new("+4 219 031234 56").national
+      assert_equal "0903 123 456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").national
+      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").national
+      assert_equal "23456789", PhoneHelper::Number.new("23456789").national
+      assert_equal "02/345 678 90", PhoneHelper::Number.new("234567890", country: "Slovakia").national
+      assert_equal "02/345 678 90", PhoneHelper::Number.new("0234567890", country: "Slovakia").national
+      assert_equal "0903 123 456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").national
+      assert_equal "02/623 456 78", PhoneHelper::Number.new("+421 (2) 6234 5678").national
+      assert_equal "02/623 456 78", PhoneHelper::Number.new("+421 (02) 6234 5678").national
+      assert_equal "021 234 5678", PhoneHelper::Number.new("00064212345678").national
+      assert_equal "044-411-1444", PhoneHelper::Number.new("81444111444").national
+      assert_equal "044-411-1444", PhoneHelper::Number.new("81444111444", country: "Australia").national
+      assert_equal "0498574619", PhoneHelper::Number.new("0498574619").national
+    end
+
     def test_search_index
       assert_nil PhoneHelper::Number.new(nil).search_index
       assert_equal "903123456", PhoneHelper::Number.new("+4 219 031234 56").search_index
