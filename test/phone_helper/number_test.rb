@@ -31,7 +31,7 @@ module PhoneHelper
       assert_equal "61432123456", PhoneHelper::Number.new("0432123456", country: "Australia").sanitized
       assert_equal "903123456", PhoneHelper::Number.new("90312 3456").sanitized
       assert_equal "421212345678", PhoneHelper::Number.new("+421 (2) 1234 5678").sanitized
-      assert_equal "421212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").sanitized
+      assert_equal "4210212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").sanitized
       assert_equal "64212345678", PhoneHelper::Number.new("00064212345678").sanitized
     end
 
@@ -46,7 +46,7 @@ module PhoneHelper
       assert_equal "61432123456", PhoneHelper::Number.new("0432123456", country: "Australia").normalized
       assert_equal "903123456", PhoneHelper::Number.new("90312 3456").normalized
       assert_equal "421212345678", PhoneHelper::Number.new("+421 (2) 1234 5678").normalized
-      assert_equal "421212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").normalized
+      assert_equal "4210212345678", PhoneHelper::Number.new("+421 (02) 1234 5678").normalized
       assert_equal "64212345678", PhoneHelper::Number.new("00064212345678").normalized
     end
 
