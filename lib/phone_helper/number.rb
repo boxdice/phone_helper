@@ -14,8 +14,7 @@ module PhoneHelper
     end
 
     def plausible?
-      return unless @original
-      phone.valid?
+      phone.valid? if @original
     end
 
     def search_index
@@ -29,6 +28,11 @@ module PhoneHelper
       else
         normalized
       end
+    end
+
+    def types
+      return [] unless @original
+      phone.types
     end
 
     def calling_code
@@ -56,7 +60,7 @@ module PhoneHelper
     def try_phone_with_fixed_line_prefix(number)
       return if number =~ /\A0[^0]/
       return unless calling_code && fixed_line_prefix
-      number2 = [calling_code, fixed_line_prefix, number.gsub(/\A0+/, "")].join
+      number2 = [calling_code, fixed_line_prefix, number].join
       phone2 = build_phone_from_number(number2)
       phone2 if phone2.valid?
     end

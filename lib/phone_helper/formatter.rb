@@ -4,7 +4,7 @@ module PhoneHelper
 
     def national
       return unless @original
-      @formatted ||= plausible? ? phone.national : digits
+      @national ||= plausible? ? phone.national : digits
     end
 
     def formatted
@@ -14,18 +14,19 @@ module PhoneHelper
     alias international formatted
 
     def normalized
-      return unless @original
-      @normalized ||= normalize
+      @normalized ||= normalize if @original
     end
 
     def sanitized
-      return unless @original
-      @sanitized ||= sanitize
+      @sanitized ||= sanitize if @original
     end
 
     def prefix
-      return unless @original
       @prefix ||= phone.country_code if plausible?
+    end
+
+    def extension
+      @extension ||= phone.extension if @original
     end
 
     private

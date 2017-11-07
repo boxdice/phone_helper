@@ -104,6 +104,13 @@ module PhoneHelper
       assert_nil PhoneHelper::Number.new("0498574619").prefix
     end
 
+    def test_extension
+      assert_empty PhoneHelper::Number.new("+4 219 031234 56").extension
+      assert_equal "123", PhoneHelper::Number.new("456#123").extension
+      assert_equal "123", PhoneHelper::Number.new("+4 219 031234 56#123").extension
+      assert_equal "123", PhoneHelper::Number.new("+4 219 031234 56;123").extension
+    end
+
     def test_national
       assert_nil PhoneHelper::Number.new(nil).national
       assert_equal "0903 123 456", PhoneHelper::Number.new("+4 219 031234 56").national

@@ -8,19 +8,19 @@ module PhoneHelper
 
   module_function
 
-  def plausible?(value, options = nil)
+  def plausible?(value, options = {})
     Number.new(value, options).plausible?
   end
 
-  def normalize(value, options = nil)
+  def normalize(value, options = {})
     Number.new(value, options).normalized
   end
 
-  def format(value, options = nil)
+  def format(value, options = {})
     Number.new(value, options).formatted
   end
 
-  def search_index(value, options = nil)
+  def search_index(value, options = {})
     Number.new(value, options).search_index
   end
 
@@ -34,6 +34,10 @@ module PhoneHelper
 
   def country_code(country)
     CountryList.country_code_for(country)
+  end
+
+  def calling_code(country)
+    CountryList.calling_code_for(country)
   end
 
 end
