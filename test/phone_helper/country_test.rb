@@ -24,7 +24,7 @@ class CountryTest < Minitest::Test
   def test_leading_digits_method
     assert_nil PhoneHelper::Country.new("XX").leading_digits
     assert_nil PhoneHelper::Country.new("AU").leading_digits
-    assert_equal %w(269 63), PhoneHelper::Country.new("YT").leading_digits
+    assert_equal %w[269 63], PhoneHelper::Country.new("YT").leading_digits
   end
 
   def test_calling_code_method
@@ -35,14 +35,14 @@ class CountryTest < Minitest::Test
 
   def test_calling_codes_method
     assert_nil PhoneHelper::Country.new("XX").calling_codes
-    assert_equal %w(61), PhoneHelper::Country.new("AU").calling_codes
-    assert_equal %w(262269 26263), PhoneHelper::Country.new("YT").calling_codes
+    assert_equal %w[61], PhoneHelper::Country.new("AU").calling_codes
+    assert_equal %w[262269 26263], PhoneHelper::Country.new("YT").calling_codes
   end
 
   def test_keys_method
-    assert_equal %w(xx), PhoneHelper::Country.new("XX").keys
-    assert_equal %w(au aus australia 61), PhoneHelper::Country.new("AU", "AUS", "Australia").keys
-    assert_equal %w(yt 262 262269 26263), PhoneHelper::Country.new("YT").keys
+    assert_equal %w[xx], PhoneHelper::Country.new("XX").keys
+    assert_equal %w[au aus australia 61], PhoneHelper::Country.new("AU", "AUS", "Australia").keys
+    assert_equal %w[yt 262 262269 26263], PhoneHelper::Country.new("YT").keys
   end
 
 end
