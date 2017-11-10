@@ -49,4 +49,22 @@ class CountryListTest < Minitest::Test
     assert_nil PhoneHelper::CountryList.guess_country("999123456789")
   end
 
+  def test_calling_code_for
+    PhoneHelper::CountryList.all.each do |country|
+      actual = PhoneHelper::CountryList.calling_code_for(country.name)
+      if country.calling_codes.size != 1
+        assert_nil actual
+      else
+        assert_equal country.calling_codes.first, actual
+      end
+    end
+  end
+
+  def test_country_code_for
+    PhoneHelper::CountryList.all.each do |country|
+      actual = PhoneHelper::CountryList.country_code_for(country.name)
+      assert_equal country.alpha2, actual
+    end
+  end
+
 end

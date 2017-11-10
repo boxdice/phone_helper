@@ -25,6 +25,17 @@ module PhoneHelper
       nil
     end
 
+    def calling_code_for(country_name)
+      countries = self[country_name]
+      calling_codes = countries.first.calling_codes if countries && countries.size == 1
+      calling_codes.first if calling_codes && calling_codes.size == 1
+    end
+
+    def country_code_for(country_name)
+      countries = self[country_name]
+      countries.first.alpha2 if countries && countries.size == 1
+    end
+
     def all
       @all ||= begin
         path = File.expand_path("../../../data/countries.csv", __FILE__)
