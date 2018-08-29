@@ -54,8 +54,8 @@ module PhoneHelper
       assert_nil PhoneHelper::Number.new(nil).formatted
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("+4 219 031234 56").formatted
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").formatted
-      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").formatted
-      assert_equal "23456789", PhoneHelper::Number.new("23456789").formatted
+      assert_equal "+421123456", PhoneHelper::Number.new("123456", country: "Slovakia").formatted
+      assert_equal "+23456789", PhoneHelper::Number.new("23456789").formatted
       assert_equal "+421 2/345 678 90", PhoneHelper::Number.new("234567890", country: "Slovakia").formatted
       assert_equal "+421 2/345 678 90", PhoneHelper::Number.new("0234567890", country: "Slovakia").formatted
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").formatted
@@ -64,7 +64,7 @@ module PhoneHelper
       assert_equal "+64 21 234 5678", PhoneHelper::Number.new("00064212345678").formatted
       assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444").formatted
       assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444", country: "Australia").formatted
-      assert_equal "0498574619", PhoneHelper::Number.new("0498574619").formatted
+      assert_equal "+0498574619", PhoneHelper::Number.new("0498574619").formatted
 
       skip # https://github.com/daddyz/phonelib/issues/72
       assert_equal "49123456", PhoneHelper::Number.new("49123456").formatted
@@ -74,8 +74,8 @@ module PhoneHelper
       assert_nil PhoneHelper::Number.new(nil).international
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("+4 219 031234 56").international
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 03123-456", country: "Slovakia").international
-      assert_equal "123456", PhoneHelper::Number.new("123456", country: "Slovakia").international
-      assert_equal "23456789", PhoneHelper::Number.new("23456789").international
+      assert_equal "+421123456", PhoneHelper::Number.new("123456", country: "Slovakia").international
+      assert_equal "+23456789", PhoneHelper::Number.new("23456789").international
       assert_equal "+421 2/345 678 90", PhoneHelper::Number.new("234567890", country: "Slovakia").international
       assert_equal "+421 2/345 678 90", PhoneHelper::Number.new("0234567890", country: "Slovakia").international
       assert_equal "+421 903 123 456", PhoneHelper::Number.new("09 0/3123 456", calling_code: "421").international
@@ -84,7 +84,7 @@ module PhoneHelper
       assert_equal "+64 21 234 5678", PhoneHelper::Number.new("00064212345678").international
       assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444").international
       assert_equal "+81 44-411-1444", PhoneHelper::Number.new("81444111444", country: "Australia").international
-      assert_equal "0498574619", PhoneHelper::Number.new("0498574619").international
+      assert_equal "+0498574619", PhoneHelper::Number.new("0498574619").international
     end
 
     def test_prefix
