@@ -4,12 +4,12 @@ module PhoneHelper
 
     def national
       return unless @original
-      @national ||= plausible? ? phone.national : digits
+      @national ||= phone.national
     end
 
     def formatted
       return unless @original
-      @formatted ||= plausible? ? phone.international : digits
+      @formatted ||= phone.international
     end
     alias international formatted
 
@@ -37,10 +37,6 @@ module PhoneHelper
 
     def sanitize
       phone.sanitized
-    end
-
-    def digits
-      @digits ||= @original.gsub(/\D/, "")
     end
 
   end
