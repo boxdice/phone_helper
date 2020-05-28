@@ -8,7 +8,7 @@ class CountryListTest < Minitest::Test
     country_codes = countries.map(&:alpha2)
 
     missing = Phonelib.phone_data.keys - country_codes
-    assert_equal ["001"], missing # 001 - International Premium Rate Service
+    assert_equal ["XK", "001"], missing # Kosovo, 001 - International Premium Rate Service
 
     obsolete = country_codes - Phonelib.phone_data.keys
     assert_equal [], obsolete
